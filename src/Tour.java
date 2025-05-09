@@ -153,6 +153,8 @@ import edu.princeton.cs.algs4.StdDraw;
 
         Point e = new Point(5.0, 6.0);
         squareTour.insertNearest(e);
+        Point f = new Point(2.5, 5.0);
+        squareTour.insertNearest(f);
         StdOut.println("Tour após inserção de e:");
         StdOut.println(squareTour);
         StdOut.println("Novo comprimento = " + squareTour.length());
