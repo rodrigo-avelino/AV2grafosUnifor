@@ -7,6 +7,12 @@
  * de duas heurísticas para encontrar boas soluções para o TSP.
  **************************************************************************** */
 import edu.princeton.cs.algs4.StdOut;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import edu.princeton.cs.algs4.StdDraw;
 
  public class Tour {
@@ -125,6 +131,67 @@ import edu.princeton.cs.algs4.StdDraw;
     public void insertSmallest(Point p) {
         // A ser implementado
     }
+     // ==== 2-OPT OPTIMIZATION ====
+    public void twoOpt() {
+        if (start == null || start.next == null || start.next == start) return;
+
+        boolean improved = true;
+
+        while (improved) {
+            improved = false;
+            Node[] nodes = toArray();
+
+            for (int i = 0; i < nodes.length - 1; i++) {
+                for (int j = i + 2; j < nodes.length; j++) {
+                    if (i == 0 && j == nodes.length - 1) continue;
+
+                    Point A = nodes[i].p;
+                    Point B = nodes[i + 1].p;
+                    Point C = nodes[j].p;
+                    Point D = nodes[(j + 1) % nodes.length].p;
+
+                    double currentDist = A.distanceTo(B) + C.distanceTo(D);
+                    double newDist = A.distanceTo(C) + B.distanceTo(D);
+
+                    if (newDist < currentDist) {
+                        reverseSegment(nodes, i + 1, j);
+                        rebuildFromArray(nodes);
+                        improved = true;
+                    }
+                }
+            }
+        }
+    }
+    private Node[] toArray() {
+        int n = size();
+        Node[] array = new Node[n];
+        Node current = start;
+        for (int i = 0; i < n; i++) {
+            array[i] = current;
+            current = current.next;
+        }
+        return array;
+    }
+
+    private void reverseSegment(Node[] nodes, int start, int end) {
+        while (start < end) {
+            Point temp = nodes[start].p;
+            nodes[start].p = nodes[end].p;
+            nodes[end].p = temp;
+            start++;
+            end--;
+        }
+    }
+
+    private void rebuildFromArray(Node[] nodes) {
+        for (int i = 0; i < nodes.length - 1; i++) {
+            nodes[i].next = nodes[i + 1];
+        }
+        nodes[nodes.length - 1].next = nodes[0];
+        start = nodes[0];
+    }
+
+
 
     // testa esta classe chamando todos os construtores e métodos de instância
     public static void main(String[] args) {
@@ -159,6 +226,19 @@ import edu.princeton.cs.algs4.StdDraw;
         StdOut.println(squareTour);
         StdOut.println("Novo comprimento = " + squareTour.length());
         //squareTour.insertSmallest(e);
+        StdOut.println("Antes do 2-opt:");
+        StdOut.println(squareTour);
+        StdOut.printf("Comprimento = %.4f\n", squareTour.length());
+
+        //squareTour.twoOpt();
+
+        squareTour.twoOpt();
+
+        StdOut.println("Depois do 2-opt:");
+        StdOut.println(squareTour);
+        StdOut.printf("Comprimento = %.4f\n", squareTour.length());
+
+
         squareTour.draw();
     }
 }

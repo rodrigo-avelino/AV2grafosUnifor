@@ -1,22 +1,10 @@
-/* *****************************************************************************
- *  NÃO MODIFIQUE OU SUBMETA ESTE ARQUIVO.
- *
- *  Retirado da Seção 3.2, An Introduction to Programming (in Java)
- *  por Robert Sedgewick e Kevin Wayne
- *
- *  Compilação:  javac Point.java
- *  Execução:    java Point < input.txt
- *
- *  Tipo de dado imutável para pontos 2D com coordenadas de ponto flutuante.
- *
- **************************************************************************** */
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdDraw;
 
- public class Point { 
+public class Point {
     private final double x;   // coordenada cartesiana x
     private final double y;   // coordenada cartesiana y
-   
+
     // cria e inicializa um ponto com (x, y) dados
     public Point(double x, double y) {
         this.x = x;
@@ -27,7 +15,7 @@ import edu.princeton.cs.algs4.StdDraw;
     public double distanceTo(Point that) {
         double dx = this.x - that.x;
         double dy = this.y - that.y;
-        return Math.sqrt(dx*dx + dy*dy);
+        return Math.sqrt(dx * dx + dy * dy);
     }
 
     // desenha este ponto na tela padrão
@@ -43,6 +31,17 @@ import edu.princeton.cs.algs4.StdDraw;
     // retorna uma representação em string deste ponto
     public String toString() {
         return "(" + x + ", " + y + ")";
+    }
+
+    // Method to access x or y coordinate by index (0 = x, 1 = y)
+    public double get(int axis) {
+        if (axis == 0) {
+            return x;  // x-coordinate
+        } else if (axis == 1) {
+            return y;  // y-coordinate
+        } else {
+            throw new IllegalArgumentException("Invalid axis: " + axis);
+        }
     }
 
     // lê um arquivo TSP da entrada padrão

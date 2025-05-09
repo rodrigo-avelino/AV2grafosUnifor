@@ -37,6 +37,8 @@ import edu.princeton.cs.algs4.StdDraw;
             double y = StdIn.readDouble();
             Point p = new Point(x, y);
             tour.insertNearest(p);
+            
+            
 
             // descomente as 4 linhas abaixo para animar
             // StdDraw.clear();
@@ -47,6 +49,9 @@ import edu.princeton.cs.algs4.StdDraw;
         }
 
         // desenhar no quadro padrão
+        StdOut.printf("iniciando otimizacao");
+        tour.twoOpt();
+
         tour.draw();
         StdDraw.show();
         
