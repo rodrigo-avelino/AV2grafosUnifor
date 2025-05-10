@@ -1,3 +1,4 @@
+
 /* *****************************************************************************
  * Grupo:
  * Alunos integrantes:
@@ -7,15 +8,9 @@
  * de duas heurísticas para encontrar boas soluções para o TSP.
  **************************************************************************** */
 import edu.princeton.cs.algs4.StdOut;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import edu.princeton.cs.algs4.StdDraw;
 
- public class Tour {
+public class Tour {
     private class Node {
         private Point p; // valor do ponto do nó
         private Node next; // ponteiro para o próximo nó
@@ -108,7 +103,7 @@ import edu.princeton.cs.algs4.StdDraw;
 
         if (start.p == null) {
             start.p = p;
-            start.next = start;  // points to itself (circular)
+            start.next = start; // points to itself (circular)
             return;
         }
 
@@ -129,11 +124,37 @@ import edu.princeton.cs.algs4.StdDraw;
 
     // insere p usando a heurística do menor aumento
     public void insertSmallest(Point p) {
-        // A ser implementado
+        Node toBeAdded = new Node();
+        toBeAdded.p = p;
+
+        if (start.p == null) {
+            start.p = p;
+            start.next = start;
+            return;
+        }
+
+        Node bestNode = start;
+        double minIncrease = Double.POSITIVE_INFINITY;
+        Node current = start;
+
+        do {
+            double increase = current.p.distanceTo(p) + p.distanceTo(current.next.p)
+                    - current.p.distanceTo(current.next.p);
+            if (increase < minIncrease) {
+                minIncrease = increase;
+                bestNode = current;
+            }
+            current = current.next;
+        } while (current != start);
+
+        toBeAdded.next = bestNode.next;
+        bestNode.next = toBeAdded;
     }
-     // ==== 2-OPT OPTIMIZATION ====
+
+    // ==== 2-OPT OPTIMIZATION ====
     public void twoOpt() {
-        if (start == null || start.next == null || start.next == start) return;
+        if (start == null || start.next == null || start.next == start)
+            return;
 
         boolean improved = true;
 
@@ -143,7 +164,8 @@ import edu.princeton.cs.algs4.StdDraw;
 
             for (int i = 0; i < nodes.length - 1; i++) {
                 for (int j = i + 2; j < nodes.length; j++) {
-                    if (i == 0 && j == nodes.length - 1) continue;
+                    if (i == 0 && j == nodes.length - 1)
+                        continue;
 
                     Point A = nodes[i].p;
                     Point B = nodes[i + 1].p;
@@ -162,6 +184,7 @@ import edu.princeton.cs.algs4.StdDraw;
             }
         }
     }
+
     private Node[] toArray() {
         int n = size();
         Node[] array = new Node[n];
@@ -190,8 +213,6 @@ import edu.princeton.cs.algs4.StdDraw;
         nodes[nodes.length - 1].next = nodes[0];
         start = nodes[0];
     }
-
-
 
     // testa esta classe chamando todos os construtores e métodos de instância
     public static void main(String[] args) {
@@ -225,19 +246,18 @@ import edu.princeton.cs.algs4.StdDraw;
         StdOut.println("Tour após inserção de e:");
         StdOut.println(squareTour);
         StdOut.println("Novo comprimento = " + squareTour.length());
-        //squareTour.insertSmallest(e);
+        // squareTour.insertSmallest(e);
         StdOut.println("Antes do 2-opt:");
         StdOut.println(squareTour);
         StdOut.printf("Comprimento = %.4f\n", squareTour.length());
 
-        //squareTour.twoOpt();
+        // squareTour.twoOpt();
 
         squareTour.twoOpt();
 
         StdOut.println("Depois do 2-opt:");
         StdOut.println(squareTour);
         StdOut.printf("Comprimento = %.4f\n", squareTour.length());
-
 
         squareTour.draw();
     }

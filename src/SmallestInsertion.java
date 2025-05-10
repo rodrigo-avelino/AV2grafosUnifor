@@ -49,6 +49,7 @@
          }
  
          // desenhar no quadro padrão
+         tour.twoOpt();
          tour.draw();
          StdDraw.show();
  

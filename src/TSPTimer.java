@@ -34,6 +34,8 @@
              Point p = new Point(x, y);
              tour1.insertNearest(p);
          }
+         //StdOut.println("Comecando otimizacao");
+         //tour1.twoOpt();
          double length1 = tour1.length();
          double elapsed1 = timer1.elapsedTime();
          StdOut.println("Comprimento do ciclo = " + length1);
